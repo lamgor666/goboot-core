@@ -31,7 +31,7 @@ func GinMidRecover() gin.HandlerFunc {
 				return
 			}
 
-			GinSendOutput(ctx, nil, err)
+			ginSendOutput(ctx, nil, err)
 		}()
 
 		ctx.Next()

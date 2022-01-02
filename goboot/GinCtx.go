@@ -21,13 +21,13 @@ import (
 	"strings"
 )
 
-func GinGetMethod(ctx *gin.Context) string {
+func ginGetMethod(ctx *gin.Context) string {
 	return strings.ToUpper(ctx.Request.Method)
 }
 
-func GinGetHeader(ctx *gin.Context, name string) string {
+func ginGetHeader(ctx *gin.Context, name string) string {
 	name = strings.ToLower(name)
-	headers := GinGetHeaders(ctx)
+	headers := ginGetHeaders(ctx)
 
 	for headerName, headerValue := range headers {
 		if strings.ToLower(headerName) == name {
@@ -38,7 +38,7 @@ func GinGetHeader(ctx *gin.Context, name string) string {
 	return ""
 }
 
-func GinGetHeaders(ctx *gin.Context) map[string]string {
+func ginGetHeaders(ctx *gin.Context) map[string]string {
 	if len(ctx.Request.Header) < 1 {
 		return map[string]string{}
 	}
@@ -57,7 +57,7 @@ func GinGetHeaders(ctx *gin.Context) map[string]string {
 	return map1
 }
 
-func GinGetQueryParams(ctx *gin.Context) map[string]string {
+func ginGetQueryParams(ctx *gin.Context) map[string]string {
 	map1 := map[string]string{}
 	values := ctx.Request.URL.Query()
 	
@@ -80,7 +80,7 @@ func GinGetQueryParams(ctx *gin.Context) map[string]string {
 	return map1
 }
 
-func GinGetQueryString(ctx *gin.Context, urlencode ...bool) string {
+func ginGetQueryString(ctx *gin.Context, urlencode ...bool) string {
 	if len(urlencode) > 0 && urlencode[0] {
 		return ctx.Request.URL.RawQuery
 	}
@@ -111,12 +111,12 @@ func GinGetQueryString(ctx *gin.Context, urlencode ...bool) string {
 	return ""
 }
 
-func GinGetRequestUrl(ctx *gin.Context, withQueryString ...bool) string {
+func ginGetRequestUrl(ctx *gin.Context, withQueryString ...bool) string {
 	s1 := ctx.Request.URL.RequestURI()
 	s1 = stringx.EnsureLeft(s1, "/")
 	
 	if len(withQueryString) > 0 && withQueryString[0] {
-		qs := GinGetQueryString(ctx)
+		qs := ginGetQueryString(ctx)
 		
 		if qs != "" {
 			s1 += "?" + qs
@@ -126,7 +126,7 @@ func GinGetRequestUrl(ctx *gin.Context, withQueryString ...bool) string {
 	return s1
 }
 
-func GinGetFormData(ctx *gin.Context) map[string]string {
+func ginGetFormData(ctx *gin.Context) map[string]string {
 	map1 := map[string]string{}
 	ctx.PostForm("NonExistsKey")
 
@@ -149,11 +149,11 @@ func GinGetFormData(ctx *gin.Context) map[string]string {
 	return map1
 }
 
-func GinGetClientIp(ctx *gin.Context) string {
-	ip := GinGetHeader(ctx, fiber.HeaderXForwardedFor)
+func ginGetClientIp(ctx *gin.Context) string {
+	ip := ginGetHeader(ctx, fiber.HeaderXForwardedFor)
 
 	if ip == "" {
-		ip = GinGetHeader(ctx, "X-Real-IP")
+		ip = ginGetHeader(ctx, "X-Real-IP")
 	}
 
 	if ip == "" {
@@ -169,7 +169,7 @@ func GinGetClientIp(ctx *gin.Context) string {
 	return strings.TrimSpace(parts[0])
 }
 
-func GinPathvariable(ctx *gin.Context, name string, defaultValue ...interface{}) string {
+func ginPathvariable(ctx *gin.Context, name string, defaultValue ...interface{}) string {
 	var dv string
 
 	if len(defaultValue) > 0 {
@@ -187,7 +187,7 @@ func GinPathvariable(ctx *gin.Context, name string, defaultValue ...interface{})
 	return value
 }
 
-func GinPathvariableBool(ctx *gin.Context, name string, defaultValue ...interface{}) bool {
+func ginPathvariableBool(ctx *gin.Context, name string, defaultValue ...interface{}) bool {
 	var dv bool
 
 	if len(defaultValue) > 0 {
@@ -203,7 +203,7 @@ func GinPathvariableBool(ctx *gin.Context, name string, defaultValue ...interfac
 	return dv
 }
 
-func GinPathvariableInt(ctx *gin.Context, name string, defaultValue ...interface{}) int {
+func ginPathvariableInt(ctx *gin.Context, name string, defaultValue ...interface{}) int {
 	dv := math.MinInt32
 
 	if len(defaultValue) > 0 {
@@ -215,7 +215,7 @@ func GinPathvariableInt(ctx *gin.Context, name string, defaultValue ...interface
 	return castx.ToInt(ctx.Param(name), dv)
 }
 
-func GinPathvariableInt64(ctx *gin.Context, name string, defaultValue ...interface{}) int64 {
+func ginPathvariableInt64(ctx *gin.Context, name string, defaultValue ...interface{}) int64 {
 	dv := int64(math.MinInt64)
 
 	if len(defaultValue) > 0 {
@@ -227,7 +227,7 @@ func GinPathvariableInt64(ctx *gin.Context, name string, defaultValue ...interfa
 	return castx.ToInt64(ctx.Param(name), dv)
 }
 
-func GinPathvariableFloat32(ctx *gin.Context, name string, defaultValue ...interface{}) float32 {
+func ginPathvariableFloat32(ctx *gin.Context, name string, defaultValue ...interface{}) float32 {
 	dv := float32(math.SmallestNonzeroFloat32)
 
 	if len(defaultValue) > 0 {
@@ -239,7 +239,7 @@ func GinPathvariableFloat32(ctx *gin.Context, name string, defaultValue ...inter
 	return castx.ToFloat32(ctx.Param(name), dv)
 }
 
-func GinPathvariableFloat64(ctx *gin.Context, name string, defaultValue ...interface{}) float64 {
+func ginPathvariableFloat64(ctx *gin.Context, name string, defaultValue ...interface{}) float64 {
 	dv := math.SmallestNonzeroFloat64
 
 	if len(defaultValue) > 0 {
@@ -251,7 +251,7 @@ func GinPathvariableFloat64(ctx *gin.Context, name string, defaultValue ...inter
 	return castx.ToFloat64(ctx.Param(name), dv)
 }
 
-func GinReqParam(ctx *gin.Context, name string, mode int, defaultValue ...interface{}) string {
+func ginReqParam(ctx *gin.Context, name string, mode int, defaultValue ...interface{}) string {
 	var dv string
 
 	if len(defaultValue) > 0 {
@@ -287,7 +287,7 @@ func GinReqParam(ctx *gin.Context, name string, mode int, defaultValue ...interf
 	return value
 }
 
-func GinReqParamBool(ctx *gin.Context, name string, defaultValue ...interface{}) bool {
+func ginReqParamBool(ctx *gin.Context, name string, defaultValue ...interface{}) bool {
 	var dv bool
 
 	if len(defaultValue) > 0 {
@@ -296,7 +296,7 @@ func GinReqParamBool(ctx *gin.Context, name string, defaultValue ...interface{})
 		}
 	}
 
-	s1 := GinReqParam(ctx, name, ReqParamSecurityMode.None)
+	s1 := ginReqParam(ctx, name, ReqParamSecurityMode.None)
 
 	if b1, err := castx.ToBoolE(s1); err == nil {
 		return b1
@@ -305,7 +305,7 @@ func GinReqParamBool(ctx *gin.Context, name string, defaultValue ...interface{})
 	return dv
 }
 
-func GinReqParamInt(ctx *gin.Context, name string, defaultValue ...interface{}) int {
+func ginReqParamInt(ctx *gin.Context, name string, defaultValue ...interface{}) int {
 	dv := math.MinInt32
 
 	if len(defaultValue) > 0 {
@@ -314,11 +314,11 @@ func GinReqParamInt(ctx *gin.Context, name string, defaultValue ...interface{}) 
 		}
 	}
 
-	s1 := GinReqParam(ctx, name, ReqParamSecurityMode.None)
+	s1 := ginReqParam(ctx, name, ReqParamSecurityMode.None)
 	return castx.ToInt(s1, dv)
 }
 
-func GinReqParamInt64(ctx *gin.Context, name string, defaultValue ...interface{}) int64 {
+func ginReqParamInt64(ctx *gin.Context, name string, defaultValue ...interface{}) int64 {
 	dv := int64(math.MinInt64)
 
 	if len(defaultValue) > 0 {
@@ -327,11 +327,11 @@ func GinReqParamInt64(ctx *gin.Context, name string, defaultValue ...interface{}
 		}
 	}
 
-	s1 := GinReqParam(ctx, name, ReqParamSecurityMode.None)
+	s1 := ginReqParam(ctx, name, ReqParamSecurityMode.None)
 	return castx.ToInt64(s1, dv)
 }
 
-func GinReqParamFloat32(ctx *gin.Context, name string, defaultValue ...interface{}) float32 {
+func ginReqParamFloat32(ctx *gin.Context, name string, defaultValue ...interface{}) float32 {
 	dv := float32(math.SmallestNonzeroFloat32)
 
 	if len(defaultValue) > 0 {
@@ -340,11 +340,11 @@ func GinReqParamFloat32(ctx *gin.Context, name string, defaultValue ...interface
 		}
 	}
 
-	s1 := GinReqParam(ctx, name, ReqParamSecurityMode.None)
+	s1 := ginReqParam(ctx, name, ReqParamSecurityMode.None)
 	return castx.ToFloat32(s1, dv)
 }
 
-func GinReqParamFloat64(ctx *gin.Context, name string, defaultValue ...interface{}) float64 {
+func ginReqParamFloat64(ctx *gin.Context, name string, defaultValue ...interface{}) float64 {
 	dv := math.SmallestNonzeroFloat64
 
 	if len(defaultValue) > 0 {
@@ -353,12 +353,12 @@ func GinReqParamFloat64(ctx *gin.Context, name string, defaultValue ...interface
 		}
 	}
 
-	s1 := GinReqParam(ctx, name, ReqParamSecurityMode.None)
+	s1 := ginReqParam(ctx, name, ReqParamSecurityMode.None)
 	return castx.ToFloat64(s1, dv)
 }
 
-func GinGetJwt(ctx *gin.Context) *jwt.Token {
-	token := strings.TrimSpace(GinGetHeader(ctx, fiber.HeaderAuthorization))
+func ginGetJwt(ctx *gin.Context) *jwt.Token {
+	token := strings.TrimSpace(ginGetHeader(ctx, fiber.HeaderAuthorization))
 	token = stringx.RegexReplace(token, `[\x20\t]+`, " ")
 
 	if strings.Contains(token, " ") {
@@ -373,13 +373,13 @@ func GinGetJwt(ctx *gin.Context) *jwt.Token {
 	return tk
 }
 
-func GinGetRawBody(ctx *gin.Context) []byte {
-	method := GinGetMethod(ctx)
+func ginGetRawBody(ctx *gin.Context) []byte {
+	method := ginGetMethod(ctx)
 	isPost := method == "POST"
 	isPut := method == "PUT"
 	isPatch := method == "PATCH"
 	isDelete := method == "DELETE"
-	contentType := strings.ToLower(GinGetHeader(ctx, fiber.HeaderContentType))
+	contentType := strings.ToLower(ginGetHeader(ctx, fiber.HeaderContentType))
 	isJson := (isPost || isPut || isPatch || isDelete) && strings.Contains(contentType, fiber.MIMEApplicationJSON)
 	isXml := (isPost || isPut || isPatch || isDelete) && (strings.Contains(contentType, fiber.MIMEApplicationXML) || strings.Contains(contentType, fiber.MIMETextXML))
 
@@ -413,7 +413,7 @@ func GinGetRawBody(ctx *gin.Context) []byte {
 		return make([]byte, 0)
 	}
 
-	formData := GinGetFormData(ctx)
+	formData := ginGetFormData(ctx)
 
 	if len(formData) < 1 {
 		return make([]byte, 0)
@@ -441,7 +441,7 @@ func GinGetRawBody(ctx *gin.Context) []byte {
 	return []byte(contents)
 }
 
-func GinGetMap(ctx *gin.Context, rules ...interface{}) map[string]interface{} {
+func ginGetMap(ctx *gin.Context, rules ...interface{}) map[string]interface{} {
 	var _rules []string
 
 	if len(rules) > 0 {
@@ -453,13 +453,13 @@ func GinGetMap(ctx *gin.Context, rules ...interface{}) map[string]interface{} {
 		}
 	}
 
-	method := GinGetMethod(ctx)
+	method := ginGetMethod(ctx)
 	isGet := method == "GET"
 	isPost := method == "POST"
 	isPut := method == "PUT"
 	isPatch := method == "PATCH"
 	isDelete := method == "DELETE"
-	contentType := strings.ToLower(GinGetHeader(ctx, fiber.HeaderContentType))
+	contentType := strings.ToLower(ginGetHeader(ctx, fiber.HeaderContentType))
 	isJson := (isPost || isPut || isPatch || isDelete) && strings.Contains(contentType, fiber.MIMEApplicationJSON)
 
 	if isJson {
@@ -505,7 +505,7 @@ func GinGetMap(ctx *gin.Context, rules ...interface{}) map[string]interface{} {
 	}
 
 	if isGet {
-		map1 := GinGetQueryParams(ctx)
+		map1 := ginGetQueryParams(ctx)
 
 		if len(_rules) < 1 {
 			return castx.ToStringMap(map1)
@@ -530,13 +530,13 @@ func GinGetMap(ctx *gin.Context, rules ...interface{}) map[string]interface{} {
 	}
 
 	map1 := map[string]interface{}{}
-	queryParams := GinGetQueryParams(ctx)
+	queryParams := ginGetQueryParams(ctx)
 
 	for key, value := range queryParams {
 		map1[key] = value
 	}
 
-	formData := GinGetFormData(ctx)
+	formData := ginGetFormData(ctx)
 
 	for key, value := range formData {
 		map1[key] = value
@@ -545,8 +545,8 @@ func GinGetMap(ctx *gin.Context, rules ...interface{}) map[string]interface{} {
 	return map1
 }
 
-func GinDtoBind(ctx *gin.Context, dto interface{}) error {
-	map1 := GinGetMap(ctx)
+func ginDtoBind(ctx *gin.Context, dto interface{}) error {
+	map1 := ginGetMap(ctx)
 
 	if len(map1) < 1 {
 		map1 = map[string]interface{}{"__UnknowKey__": ""}
@@ -555,7 +555,7 @@ func GinDtoBind(ctx *gin.Context, dto interface{}) error {
 	return mapx.BindToDto(map1, dto)
 }
 
-func GinGetUploadedFile(ctx *gin.Context, formFieldName string) *multipart.FileHeader {
+func ginGetUploadedFile(ctx *gin.Context, formFieldName string) *multipart.FileHeader {
 	if fh, err := ctx.FormFile(formFieldName); err != nil {
 		return fh
 	}
@@ -563,7 +563,7 @@ func GinGetUploadedFile(ctx *gin.Context, formFieldName string) *multipart.FileH
 	return nil
 }
 
-func GinSendOutput(ctx *gin.Context, payload ResponsePayload, err error) {
+func ginSendOutput(ctx *gin.Context, payload ResponsePayload, err error) {
 	if err != nil {
 		handlers := ErrorHandlers()
 		var handler ErrorHandler

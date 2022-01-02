@@ -22,15 +22,15 @@ func GinMidRequestLog() gin.HandlerFunc {
 
 		logger := RequestLogLogger()
 		sb := strings.Builder{}
-		sb.WriteString(GinGetMethod(ctx))
+		sb.WriteString(ginGetMethod(ctx))
 		sb.WriteString(" ")
-		sb.WriteString(GinGetRequestUrl(ctx, true))
+		sb.WriteString(ginGetRequestUrl(ctx, true))
 		sb.WriteString(" from ")
-		sb.WriteString(GinGetClientIp(ctx))
+		sb.WriteString(ginGetClientIp(ctx))
 		logger.Info(sb.String())
 
 		if LogRequestBody() {
-			rawBody := GinGetRawBody(ctx)
+			rawBody := ginGetRawBody(ctx)
 
 			if len(rawBody) > 0 {
 				logger.Debugf(string(rawBody))

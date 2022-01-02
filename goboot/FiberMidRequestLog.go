@@ -23,13 +23,13 @@ func FiberMidRequestLog() fiber.Handler {
 		sb := strings.Builder{}
 		sb.WriteString(ctx.Method())
 		sb.WriteString(" ")
-		sb.WriteString(FiberGetRequestUrl(ctx, true))
+		sb.WriteString(fiberGetRequestUrl(ctx, true))
 		sb.WriteString(" from ")
-		sb.WriteString(FiberGetClientIp(ctx))
+		sb.WriteString(fiberGetClientIp(ctx))
 		logger.Info(sb.String())
 
 		if LogRequestBody() {
-			rawBody := FiberGetRawBody(ctx)
+			rawBody := fiberGetRawBody(ctx)
 
 			if len(rawBody) > 0 {
 				logger.Debugf(string(rawBody))

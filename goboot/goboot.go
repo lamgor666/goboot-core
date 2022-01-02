@@ -21,7 +21,7 @@ import (
 
 type ImageInfoGetFunc func(fh *multipart.FileHeader) map[string]interface{}
 
-var Version = "1.0.1"
+var Version = "1.0.2"
 var errorHandlers = make([]ErrorHandler, 0)
 
 func WithBuiltinErrorHandlers() {
@@ -102,21 +102,9 @@ func LogExecuteTime(arg0 interface{}) {
 	}
 
 	sb := strings.Builder{}
-
-	if ctx, ok := arg0.(*fiber.Ctx); ok {
-		sb.WriteString(FiberGetMethod(ctx))
-	} else if ctx, ok := arg0.(*gin.Context); ok {
-		sb.WriteString(GinGetMethod(ctx))
-	}
-
+	sb.WriteString(GetMethod(arg0))
 	sb.WriteString(" ")
-
-	if ctx, ok := arg0.(*fiber.Ctx); ok {
-		sb.WriteString(FiberGetRequestUrl(ctx, true))
-	} else if ctx, ok := arg0.(*gin.Context); ok {
-		sb.WriteString(GinGetRequestUrl(ctx, true))
-	}
-
+	sb.WriteString(GetRequestUrl(arg0, true))
 	sb.WriteString(", total elapsed time: " + elapsedTime)
 	ExecuteTimeLogLogger().Info(sb.String())
 
@@ -185,11 +173,7 @@ func RateLimitCheck(arg0 interface{}, handlerName string, settings interface{}) 
 	id := handlerName
 
 	if limitByIp {
-		if ctx, ok := arg0.(*fiber.Ctx); ok {
-			id += "@" + FiberGetClientIp(ctx)
-		} else if ctx, ok := arg0.(*gin.Context); ok {
-			id += "@" + GinGetClientIp(ctx)
-		}
+		id += "@" + GetClientIp(arg0)
 	}
 
 	opts := RateLimiter.NewOptions(RatelimiterLuaFile(), RatelimiterCacheDir())
@@ -215,15 +199,8 @@ func JwtAuthCheck(arg0 interface{}, settingsKey string) error {
 		return nil
 	}
 
-	var token string
-
-	if ctx, ok := arg0.(*fiber.Ctx); ok {
-		token = strings.TrimSpace(ctx.Get(fiber.HeaderAuthorization))
-		token = stringx.RegexReplace(token, RegexConst.SpaceSep, " ")
-	} else if ctx, ok := arg0.(*gin.Context); ok {
-		token = strings.TrimSpace(GinGetHeader(ctx, fiber.HeaderAuthorization))
-		token = stringx.RegexReplace(token, RegexConst.SpaceSep, " ")
-	}
+	token := GetHeader(arg0, fiber.HeaderAuthorization)
+	token = stringx.RegexReplace(token, RegexConst.SpaceSep, " ")
 
 	if strings.Contains(token, " ") {
 		token = stringx.SubstringAfter(token, " ")
@@ -284,13 +261,7 @@ func ValidateCheck(arg0 interface{}, settings interface{}) error {
 	}
 
 	validator := validatex.NewValidator()
-	data := map[string]interface{}{}
-
-	if ctx, ok := arg0.(*fiber.Ctx); ok {
-		data = FiberGetMap(ctx)
-	} else if ctx, ok := arg0.(*gin.Context); ok {
-		data = GinGetMap(ctx)
-	}
+	data := GetMap(arg0)
 
 	if failfast {
 		errorTips := validatex.FailfastValidate(validator, data, rules)

@@ -10,12 +10,12 @@ import (
 
 func GinMidRequestBody() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		method := GinGetMethod(ctx)
+		method := ginGetMethod(ctx)
 		isPost := method == "POST"
 		isPut := method == "PUT"
 		isPatch := method == "PATCH"
 		isDelete := method == "DELETE"
-		contentType := strings.ToLower(GinGetHeader(ctx, fiber.HeaderContentType))
+		contentType := strings.ToLower(ginGetHeader(ctx, fiber.HeaderContentType))
 		isJson := (isPost || isPut || isPatch || isDelete) && strings.Contains(contentType, fiber.MIMEApplicationJSON)
 		isXml := (isPost || isPut || isPatch || isDelete) && (strings.Contains(contentType, fiber.MIMEApplicationXML) || strings.Contains(contentType, fiber.MIMETextXML))
 

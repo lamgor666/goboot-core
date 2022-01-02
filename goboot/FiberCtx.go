@@ -20,15 +20,15 @@ import (
 	"strings"
 )
 
-func FiberGetMethod(ctx *fiber.Ctx) string {
+func fiberGetMethod(ctx *fiber.Ctx) string {
 	return ctx.Method()
 }
 
-func FiberGetHeader(ctx *fiber.Ctx, name string) string {
+func fiberGetHeader(ctx *fiber.Ctx, name string) string {
 	return ctx.Get(name)
 }
 
-func FiberGetHeaders(ctx *fiber.Ctx) map[string]string {
+func fiberGetHeaders(ctx *fiber.Ctx) map[string]string {
 	map1 := map[string]string{}
 
 	ctx.Request().Header.VisitAll(func(keyBytes, valueBytes []byte) {
@@ -54,7 +54,7 @@ func FiberGetHeaders(ctx *fiber.Ctx) map[string]string {
 	return map1
 }
 
-func FiberGetQueryParams(ctx *fiber.Ctx) map[string]string {
+func fiberGetQueryParams(ctx *fiber.Ctx) map[string]string {
 	s1 := utils.CopyString(ctx.OriginalURL())
 
 	if !strings.Contains(s1, "?") {
@@ -84,7 +84,7 @@ func FiberGetQueryParams(ctx *fiber.Ctx) map[string]string {
 	return map1
 }
 
-func FiberGetQueryString(ctx *fiber.Ctx, urlencode ...bool) string {
+func fiberGetQueryString(ctx *fiber.Ctx, urlencode ...bool) string {
 	if len(urlencode) < 1 || !urlencode[0] {
 		s1 := utils.CopyString(ctx.OriginalURL())
 
@@ -95,7 +95,7 @@ func FiberGetQueryString(ctx *fiber.Ctx, urlencode ...bool) string {
 		return stringx.SubstringAfter(s1, "?")
 	}
 	
-	map1 := FiberGetQueryParams(ctx)
+	map1 := fiberGetQueryParams(ctx)
 	
 	if len(map1) < 1 {
 		return ""
@@ -110,7 +110,7 @@ func FiberGetQueryString(ctx *fiber.Ctx, urlencode ...bool) string {
 	return values.Encode()
 }
 
-func FiberGetRequestUrl(ctx *fiber.Ctx, withQueryString ...bool) string {
+func fiberGetRequestUrl(ctx *fiber.Ctx, withQueryString ...bool) string {
 	s1 := utils.CopyString(ctx.OriginalURL())
 	
 	if s1 == "" {
@@ -130,7 +130,7 @@ func FiberGetRequestUrl(ctx *fiber.Ctx, withQueryString ...bool) string {
 	return s1
 }
 
-func FiberGetFormData(ctx *fiber.Ctx) map[string]string {
+func fiberGetFormData(ctx *fiber.Ctx) map[string]string {
 	map1 := map[string]string{}
 	isPost := ctx.Request().Header.IsPost()
 
@@ -191,7 +191,7 @@ func FiberGetFormData(ctx *fiber.Ctx) map[string]string {
 	return map1
 }
 
-func FiberGetClientIp(ctx *fiber.Ctx) string {
+func fiberGetClientIp(ctx *fiber.Ctx) string {
 	ips := ctx.IPs()
 
 	if len(ips) > 0 {
@@ -217,7 +217,7 @@ func FiberGetClientIp(ctx *fiber.Ctx) string {
 	return strings.TrimSpace(parts[0])
 }
 
-func FiberPathvariable(ctx *fiber.Ctx, name string, defaultValue ...interface{}) string {
+func fiberPathvariable(ctx *fiber.Ctx, name string, defaultValue ...interface{}) string {
 	var dv string
 
 	if len(defaultValue) > 0 {
@@ -229,7 +229,7 @@ func FiberPathvariable(ctx *fiber.Ctx, name string, defaultValue ...interface{})
 	return ctx.Params(name, dv)
 }
 
-func FiberPathvariableBool(ctx *fiber.Ctx, name string, defaultValue ...interface{}) bool {
+func fiberPathvariableBool(ctx *fiber.Ctx, name string, defaultValue ...interface{}) bool {
 	var dv bool
 
 	if len(defaultValue) > 0 {
@@ -245,7 +245,7 @@ func FiberPathvariableBool(ctx *fiber.Ctx, name string, defaultValue ...interfac
 	return dv
 }
 
-func FiberPathvariableInt(ctx *fiber.Ctx, name string, defaultValue ...interface{}) int {
+func fiberPathvariableInt(ctx *fiber.Ctx, name string, defaultValue ...interface{}) int {
 	dv := math.MinInt32
 
 	if len(defaultValue) > 0 {
@@ -257,7 +257,7 @@ func FiberPathvariableInt(ctx *fiber.Ctx, name string, defaultValue ...interface
 	return castx.ToInt(ctx.Params(name), dv)
 }
 
-func FiberPathvariableInt64(ctx *fiber.Ctx, name string, defaultValue ...interface{}) int64 {
+func fiberPathvariableInt64(ctx *fiber.Ctx, name string, defaultValue ...interface{}) int64 {
 	dv := int64(math.MinInt64)
 
 	if len(defaultValue) > 0 {
@@ -269,7 +269,7 @@ func FiberPathvariableInt64(ctx *fiber.Ctx, name string, defaultValue ...interfa
 	return castx.ToInt64(ctx.Params(name), dv)
 }
 
-func FiberPathvariableFloat32(ctx *fiber.Ctx, name string, defaultValue ...interface{}) float32 {
+func fiberPathvariableFloat32(ctx *fiber.Ctx, name string, defaultValue ...interface{}) float32 {
 	dv := float32(math.SmallestNonzeroFloat32)
 
 	if len(defaultValue) > 0 {
@@ -281,7 +281,7 @@ func FiberPathvariableFloat32(ctx *fiber.Ctx, name string, defaultValue ...inter
 	return castx.ToFloat32(ctx.Params(name), dv)
 }
 
-func FiberPathvariableFloat64(ctx *fiber.Ctx, name string, defaultValue ...interface{}) float64 {
+func fiberPathvariableFloat64(ctx *fiber.Ctx, name string, defaultValue ...interface{}) float64 {
 	dv := math.SmallestNonzeroFloat64
 
 	if len(defaultValue) > 0 {
@@ -293,7 +293,7 @@ func FiberPathvariableFloat64(ctx *fiber.Ctx, name string, defaultValue ...inter
 	return castx.ToFloat64(ctx.Params(name), dv)
 }
 
-func FiberReqParam(ctx *fiber.Ctx, name string, mode int, defaultValue ...interface{}) string {
+func fiberReqParam(ctx *fiber.Ctx, name string, mode int, defaultValue ...interface{}) string {
 	var dv string
 
 	if len(defaultValue) > 0 {
@@ -329,7 +329,7 @@ func FiberReqParam(ctx *fiber.Ctx, name string, mode int, defaultValue ...interf
 	return value
 }
 
-func FiberReqParamBool(ctx *fiber.Ctx, name string, defaultValue ...interface{}) bool {
+func fiberReqParamBool(ctx *fiber.Ctx, name string, defaultValue ...interface{}) bool {
 	var dv bool
 
 	if len(defaultValue) > 0 {
@@ -338,7 +338,7 @@ func FiberReqParamBool(ctx *fiber.Ctx, name string, defaultValue ...interface{})
 		}
 	}
 
-	s1 := FiberReqParam(ctx, name, ReqParamSecurityMode.None)
+	s1 := fiberReqParam(ctx, name, ReqParamSecurityMode.None)
 
 	if b1, err := castx.ToBoolE(s1); err == nil {
 		return b1
@@ -347,7 +347,7 @@ func FiberReqParamBool(ctx *fiber.Ctx, name string, defaultValue ...interface{})
 	return dv
 }
 
-func FiberReqParamInt(ctx *fiber.Ctx, name string, defaultValue ...interface{}) int {
+func fiberReqParamInt(ctx *fiber.Ctx, name string, defaultValue ...interface{}) int {
 	dv := math.MinInt32
 
 	if len(defaultValue) > 0 {
@@ -356,11 +356,11 @@ func FiberReqParamInt(ctx *fiber.Ctx, name string, defaultValue ...interface{}) 
 		}
 	}
 
-	s1 := FiberReqParam(ctx, name, ReqParamSecurityMode.None)
+	s1 := fiberReqParam(ctx, name, ReqParamSecurityMode.None)
 	return castx.ToInt(s1, dv)
 }
 
-func FiberReqParamInt64(ctx *fiber.Ctx, name string, defaultValue ...interface{}) int64 {
+func fiberReqParamInt64(ctx *fiber.Ctx, name string, defaultValue ...interface{}) int64 {
 	dv := int64(math.MinInt64)
 
 	if len(defaultValue) > 0 {
@@ -369,11 +369,11 @@ func FiberReqParamInt64(ctx *fiber.Ctx, name string, defaultValue ...interface{}
 		}
 	}
 
-	s1 := FiberReqParam(ctx, name, ReqParamSecurityMode.None)
+	s1 := fiberReqParam(ctx, name, ReqParamSecurityMode.None)
 	return castx.ToInt64(s1, dv)
 }
 
-func FiberReqParamFloat32(ctx *fiber.Ctx, name string, defaultValue ...interface{}) float32 {
+func fiberReqParamFloat32(ctx *fiber.Ctx, name string, defaultValue ...interface{}) float32 {
 	dv := float32(math.SmallestNonzeroFloat32)
 
 	if len(defaultValue) > 0 {
@@ -382,11 +382,11 @@ func FiberReqParamFloat32(ctx *fiber.Ctx, name string, defaultValue ...interface
 		}
 	}
 
-	s1 := FiberReqParam(ctx, name, ReqParamSecurityMode.None)
+	s1 := fiberReqParam(ctx, name, ReqParamSecurityMode.None)
 	return castx.ToFloat32(s1, dv)
 }
 
-func FiberReqParamFloat64(ctx *fiber.Ctx, name string, defaultValue ...interface{}) float64 {
+func fiberReqParamFloat64(ctx *fiber.Ctx, name string, defaultValue ...interface{}) float64 {
 	dv := math.SmallestNonzeroFloat64
 
 	if len(defaultValue) > 0 {
@@ -395,11 +395,11 @@ func FiberReqParamFloat64(ctx *fiber.Ctx, name string, defaultValue ...interface
 		}
 	}
 
-	s1 := FiberReqParam(ctx, name, ReqParamSecurityMode.None)
+	s1 := fiberReqParam(ctx, name, ReqParamSecurityMode.None)
 	return castx.ToFloat64(s1, dv)
 }
 
-func FiberGetJwt(ctx *fiber.Ctx) *jwt.Token {
+func fiberGetJwt(ctx *fiber.Ctx) *jwt.Token {
 	token := strings.TrimSpace(ctx.Get(fiber.HeaderAuthorization))
 	token = stringx.RegexReplace(token, `[\x20\t]+`, " ")
 
@@ -415,7 +415,7 @@ func FiberGetJwt(ctx *fiber.Ctx) *jwt.Token {
 	return tk
 }
 
-func FiberGetRawBody(ctx *fiber.Ctx) []byte {
+func fiberGetRawBody(ctx *fiber.Ctx) []byte {
 	isPost := ctx.Request().Header.IsPost()
 	isPut := ctx.Request().Header.IsPut()
 	isPatch := ctx.Request().Header.IsPatch()
@@ -449,7 +449,7 @@ func FiberGetRawBody(ctx *fiber.Ctx) []byte {
 		return make([]byte, 0)
 	}
 
-	formData := FiberGetFormData(ctx)
+	formData := fiberGetFormData(ctx)
 
 	if len(formData) < 1 {
 		return make([]byte, 0)
@@ -477,7 +477,7 @@ func FiberGetRawBody(ctx *fiber.Ctx) []byte {
 	return []byte(contents)
 }
 
-func FiberGetMap(ctx *fiber.Ctx, rules ...interface{}) map[string]interface{} {
+func fiberGetMap(ctx *fiber.Ctx, rules ...interface{}) map[string]interface{} {
 	var _rules []string
 
 	if len(rules) > 0 {
@@ -527,7 +527,7 @@ func FiberGetMap(ctx *fiber.Ctx, rules ...interface{}) map[string]interface{} {
 	}
 
 	if isGet {
-		map1 := FiberGetQueryParams(ctx)
+		map1 := fiberGetQueryParams(ctx)
 
 		if len(_rules) < 1 {
 			return castx.ToStringMap(map1)
@@ -553,13 +553,13 @@ func FiberGetMap(ctx *fiber.Ctx, rules ...interface{}) map[string]interface{} {
 	}
 
 	map1 := map[string]interface{}{}
-	queryParams := FiberGetQueryParams(ctx)
+	queryParams := fiberGetQueryParams(ctx)
 
 	for key, value := range queryParams {
 		map1[key] = value
 	}
 
-	formData := FiberGetFormData(ctx)
+	formData := fiberGetFormData(ctx)
 
 	for key, value := range formData {
 		map1[key] = value
@@ -568,8 +568,8 @@ func FiberGetMap(ctx *fiber.Ctx, rules ...interface{}) map[string]interface{} {
 	return map1
 }
 
-func FiberDtoBind(ctx *fiber.Ctx, dto interface{}) error {
-	map1 := FiberGetMap(ctx)
+func fiberDtoBind(ctx *fiber.Ctx, dto interface{}) error {
+	map1 := fiberGetMap(ctx)
 
 	if len(map1) < 1 {
 		map1 = map[string]interface{}{"__UnknowKey__": ""}
@@ -578,7 +578,7 @@ func FiberDtoBind(ctx *fiber.Ctx, dto interface{}) error {
 	return mapx.BindToDto(map1, dto)
 }
 
-func FiberGetUploadedFile(ctx *fiber.Ctx, formFieldName string) *multipart.FileHeader {
+func fiberGetUploadedFile(ctx *fiber.Ctx, formFieldName string) *multipart.FileHeader {
 	if fh, err := ctx.FormFile(formFieldName); err != nil {
 		return fh
 	}
@@ -586,7 +586,7 @@ func FiberGetUploadedFile(ctx *fiber.Ctx, formFieldName string) *multipart.FileH
 	return nil
 }
 
-func FiberSendOutput(ctx *fiber.Ctx, payload ResponsePayload, err error) error {
+func fiberSendOutput(ctx *fiber.Ctx, payload ResponsePayload, err error) error {
 	if err != nil {
 		handler := FiberErrorHandler()
 		_ = handler(ctx, err)

@@ -212,7 +212,7 @@ func BuildJsonWebToken(arg0 interface{}, isRefreshToken bool, claims ...map[stri
 	return
 }
 
-// @param *jwt.Token|*fiber.Ctx|string arg0
+// @param *jwt.Token|*fiber.Ctx|*gin.Context|string arg0
 func JwtClaim(arg0 interface{}, name string, defaultValue ...interface{}) string {
 	var dv string
 
@@ -227,9 +227,9 @@ func JwtClaim(arg0 interface{}, name string, defaultValue ...interface{}) string
 	if tk, ok := arg0.(*jwt.Token); ok {
 		token = tk
 	} else if ctx, ok := arg0.(*fiber.Ctx); ok {
-		token = FiberGetJwt(ctx)
+		token = fiberGetJwt(ctx)
 	} else if ctx, ok := arg0.(*gin.Context); ok {
-		token = GinGetJwt(ctx)
+		token = ginGetJwt(ctx)
 	} else if s1, ok := arg0.(string); ok && s1 != "" {
 		tk, _ := ParseJsonWebToken(s1)
 		token = tk
@@ -252,7 +252,7 @@ func JwtClaim(arg0 interface{}, name string, defaultValue ...interface{}) string
 	return dv
 }
 
-// @param *jwt.Token|*fiber.Ctx|string arg0
+// @param *jwt.Token|*fiber.Ctx|*gin.Context|string arg0
 func JwtClaimBool(arg0 interface{}, name string, defaultValue ...interface{}) bool {
 	var dv bool
 
@@ -267,9 +267,9 @@ func JwtClaimBool(arg0 interface{}, name string, defaultValue ...interface{}) bo
 	if tk, ok := arg0.(*jwt.Token); ok {
 		token = tk
 	} else if ctx, ok := arg0.(*fiber.Ctx); ok {
-		token = FiberGetJwt(ctx)
+		token = fiberGetJwt(ctx)
 	} else if ctx, ok := arg0.(*gin.Context); ok {
-		token = GinGetJwt(ctx)
+		token = ginGetJwt(ctx)
 	} else if s1, ok := arg0.(string); ok && s1 != "" {
 		tk, _ := ParseJsonWebToken(s1)
 		token = tk
@@ -292,7 +292,7 @@ func JwtClaimBool(arg0 interface{}, name string, defaultValue ...interface{}) bo
 	return dv
 }
 
-// @param *jwt.Token|*fiber.Ctx|string arg0
+// @param *jwt.Token|*fiber.Ctx|*gin.Context|string arg0
 func JwtClaimInt(arg0 interface{}, name string, defaultValue ...interface{}) int {
 	dv := math.MinInt32
 
@@ -307,9 +307,9 @@ func JwtClaimInt(arg0 interface{}, name string, defaultValue ...interface{}) int
 	if tk, ok := arg0.(*jwt.Token); ok {
 		token = tk
 	} else if ctx, ok := arg0.(*fiber.Ctx); ok {
-		token = FiberGetJwt(ctx)
+		token = fiberGetJwt(ctx)
 	} else if ctx, ok := arg0.(*gin.Context); ok {
-		token = GinGetJwt(ctx)
+		token = ginGetJwt(ctx)
 	} else if s1, ok := arg0.(string); ok && s1 != "" {
 		tk, _ := ParseJsonWebToken(s1)
 		token = tk
@@ -332,7 +332,7 @@ func JwtClaimInt(arg0 interface{}, name string, defaultValue ...interface{}) int
 	return dv
 }
 
-// @param *jwt.Token|*fiber.Ctx|string arg0
+// @param *jwt.Token|*fiber.Ctx|*gin.Context|string arg0
 func JwtClaimInt64(arg0 interface{}, name string, defaultValue ...interface{}) int64 {
 	dv := int64(math.MinInt64)
 
@@ -347,9 +347,9 @@ func JwtClaimInt64(arg0 interface{}, name string, defaultValue ...interface{}) i
 	if tk, ok := arg0.(*jwt.Token); ok {
 		token = tk
 	} else if ctx, ok := arg0.(*fiber.Ctx); ok {
-		token = FiberGetJwt(ctx)
+		token = fiberGetJwt(ctx)
 	} else if ctx, ok := arg0.(*gin.Context); ok {
-		token = GinGetJwt(ctx)
+		token = ginGetJwt(ctx)
 	} else if s1, ok := arg0.(string); ok && s1 != "" {
 		tk, _ := ParseJsonWebToken(s1)
 		token = tk
@@ -372,7 +372,7 @@ func JwtClaimInt64(arg0 interface{}, name string, defaultValue ...interface{}) i
 	return dv
 }
 
-// @param *jwt.Token|*fiber.Ctx|string arg0
+// @param *jwt.Token|*fiber.Ctx|*gin.Context|string arg0
 func JwtClaimFloat32(arg0 interface{}, name string, defaultValue ...interface{}) float32 {
 	dv := float32(math.SmallestNonzeroFloat32)
 
@@ -387,9 +387,9 @@ func JwtClaimFloat32(arg0 interface{}, name string, defaultValue ...interface{})
 	if tk, ok := arg0.(*jwt.Token); ok {
 		token = tk
 	} else if ctx, ok := arg0.(*fiber.Ctx); ok {
-		token = FiberGetJwt(ctx)
+		token = fiberGetJwt(ctx)
 	} else if ctx, ok := arg0.(*gin.Context); ok {
-		token = GinGetJwt(ctx)
+		token = ginGetJwt(ctx)
 	} else if s1, ok := arg0.(string); ok && s1 != "" {
 		tk, _ := ParseJsonWebToken(s1)
 		token = tk
@@ -412,7 +412,7 @@ func JwtClaimFloat32(arg0 interface{}, name string, defaultValue ...interface{})
 	return dv
 }
 
-// @param *jwt.Token|*fiber.Ctx|string arg0
+// @param *jwt.Token|*fiber.Ctx|*gin.Context|string arg0
 func JwtClaimFloat64(arg0 interface{}, name string, defaultValue ...interface{}) float64 {
 	dv := math.SmallestNonzeroFloat64
 
@@ -427,9 +427,9 @@ func JwtClaimFloat64(arg0 interface{}, name string, defaultValue ...interface{})
 	if tk, ok := arg0.(*jwt.Token); ok {
 		token = tk
 	} else if ctx, ok := arg0.(*fiber.Ctx); ok {
-		token = FiberGetJwt(ctx)
+		token = fiberGetJwt(ctx)
 	} else if ctx, ok := arg0.(*gin.Context); ok {
-		token = GinGetJwt(ctx)
+		token = ginGetJwt(ctx)
 	} else if s1, ok := arg0.(string); ok && s1 != "" {
 		tk, _ := ParseJsonWebToken(s1)
 		token = tk
@@ -452,16 +452,16 @@ func JwtClaimFloat64(arg0 interface{}, name string, defaultValue ...interface{})
 	return dv
 }
 
-// @param *jwt.Token|*fiber.Ctx|string arg0
+// @param *jwt.Token|*fiber.Ctx|*gin.Context|string arg0
 func JwtClaimStringSlice(arg0 interface{}, name string) []string {
 	var token *jwt.Token
 
 	if tk, ok := arg0.(*jwt.Token); ok {
 		token = tk
 	} else if ctx, ok := arg0.(*fiber.Ctx); ok {
-		token = FiberGetJwt(ctx)
+		token = fiberGetJwt(ctx)
 	} else if ctx, ok := arg0.(*gin.Context); ok {
-		token = GinGetJwt(ctx)
+		token = ginGetJwt(ctx)
 	} else if s1, ok := arg0.(string); ok && s1 != "" {
 		tk, _ := ParseJsonWebToken(s1)
 		token = tk
@@ -480,16 +480,16 @@ func JwtClaimStringSlice(arg0 interface{}, name string) []string {
 	return castx.ToStringSlice(claims[name])
 }
 
-// @param *jwt.Token|*fiber.Ctx|string arg0
+// @param *jwt.Token|*fiber.Ctx|*gin.Context|string arg0
 func JwtClaimIntSlice(arg0 interface{}, name string) []int {
 	var token *jwt.Token
 
 	if tk, ok := arg0.(*jwt.Token); ok {
 		token = tk
 	} else if ctx, ok := arg0.(*fiber.Ctx); ok {
-		token = FiberGetJwt(ctx)
+		token = fiberGetJwt(ctx)
 	} else if ctx, ok := arg0.(*gin.Context); ok {
-		token = GinGetJwt(ctx)
+		token = ginGetJwt(ctx)
 	} else if s1, ok := arg0.(string); ok && s1 != "" {
 		tk, _ := ParseJsonWebToken(s1)
 		token = tk
