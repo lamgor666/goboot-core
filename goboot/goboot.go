@@ -21,7 +21,7 @@ import (
 
 type ImageInfoGetFunc func(fh *multipart.FileHeader) map[string]interface{}
 
-var Version = "1.0.0"
+var Version = "1.0.1"
 var errorHandlers = make([]ErrorHandler, 0)
 
 func WithBuiltinErrorHandlers() {
